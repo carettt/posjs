@@ -1,23 +1,4 @@
-//declare class interfaces
-// interface Vector2D {
-//     x: number;
-//     y: number;
-// }
-
-// interface Vector3D {
-//     x: number;
-//     y: number;
-//     z: number;
-// }
-
-// interface CircleShape {
-//     velocity: Vector2D;
-//     pos: Vector2D;
-//     mass: number;
-//     radius: number;
-// }
-
-type Shape = typeof Circle;
+type Shape = Circle;
 
 //Simple Vector2 class that has vector addition, subtraction, scalar multiplication, and division. It also includes magnitude and direction functions.
 class Vector2 {
@@ -29,19 +10,19 @@ class Vector2 {
         this.y = y;
     }
 
-    add(vec: typeof Vector2): typeof Vector2 {
+    add(vec: Vector2): Vector2 {
         return new Vector2(this.x + vec.x, this.y + vec.y);
     }
 
-    sub(vec: typeof Vector2): typeof Vector2 {
+    sub(vec: Vector2): Vector2 {
         return new Vector2(this.x - vec.x, this.y - vec.y);
     }
 
-    mult(scalar: number): typeof Vector2 {
+    mult(scalar: number): Vector2 {
         return new Vector2(this.x * scalar, this.y * scalar);
     }
 
-    div(scalar: number): typeof Vector2 {
+    div(scalar: number): Vector2 {
         return new Vector2(this.x / scalar, this.y / scalar);
     }
 
@@ -66,19 +47,19 @@ class Vector3 {
         this.z = z;
     }
 
-    add(vec: typeof Vector3): typeof Vector3 {
+    add(vec: Vector3): Vector3 {
         return new Vector3(this.x + vec.x, this.y + vec.y, this.z + vec.z);
     }
 
-    sub(vec: typeof Vector3): typeof Vector3 {
+    sub(vec: Vector3): Vector3 {
         return new Vector3(this.x - vec.x, this.y - vec.y, this.z - vec.z);
     }
 
-    mult(scalar: number): typeof Vector3 {
+    mult(scalar: number): Vector3 {
         return new Vector3(this.x * scalar, this.y * scalar, this.z * scalar);
     }
 
-    div(scalar: number): typeof Vector3 {
+    div(scalar: number): Vector3 {
         return new Vector3(this.x / scalar, this.y / scalar, this.z * scalar);
     }
 
@@ -91,14 +72,14 @@ class Vector3 {
 
 //circle collision class
 class Circle {
-    velocity: typeof Vector2;
-    pos: typeof Vector2;
+    velocity: Vector2;
+    pos: Vector2;
     mass: number;
     radius: number;
 
     constructor(
-        initial: typeof Vector2 = new Vector2(0, 0),
-        pos: typeof Vector2,
+        initial: Vector2 = new Vector2(0, 0),
+        pos: Vector2,
         mass: number,
         radius: number
     ) {
@@ -108,7 +89,7 @@ class Circle {
         this.radius = radius;
     }
 
-    detectCollision(other: typeof Circle): boolean {
+    detectCollision(other: Circle): boolean {
         return other.pos.getMag() - this.pos.getMag() < this.radius;
     }
 }

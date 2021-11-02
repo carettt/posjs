@@ -1,8 +1,3 @@
-//declare class interfaces
-// interface Vector2D {
-//     x: number;
-//     y: number;
-// }
 //Simple Vector2 class that has vector addition, subtraction, scalar multiplication, and division. It also includes magnitude and direction functions.
 var Vector2 = /** @class */ (function () {
     function Vector2(x, y) {
