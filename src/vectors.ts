@@ -1,5 +1,3 @@
-type Shape = Circle;
-
 //Simple Vector2 class that has vector addition, subtraction, scalar multiplication, and division. It also includes magnitude and direction functions.
 class Vector2 {
     x: number;
@@ -67,29 +65,5 @@ class Vector3 {
         return Math.sqrt(
             Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2)
         );
-    }
-}
-
-//circle collision class
-class Circle {
-    velocity: Vector2;
-    pos: Vector2;
-    mass: number;
-    radius: number;
-
-    constructor(
-        initial: Vector2 = new Vector2(0, 0),
-        pos: Vector2,
-        mass: number,
-        radius: number
-    ) {
-        this.velocity = initial;
-        this.pos = pos;
-        this.mass = mass;
-        this.radius = radius;
-    }
-
-    detectCollision(other: Circle): boolean {
-        return other.pos.getMag() - this.pos.getMag() < this.radius;
     }
 }
