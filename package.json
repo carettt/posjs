@@ -1,0 +1,25 @@
+{
+    "name": "posjs",
+    "version": "0.0.1",
+    "description": "A 2D/3D physics engine for JavaScript.",
+    "main": "built/pos.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/carettt/posjs.git"
+    },
+    "keywords": [
+        "physics",
+        "2D",
+        "3D"
+    ],
+    "author": "caret_",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/carettt/posjs/issues"
+    },
+    "homepage": "https://github.com/carettt/posjs#readme",
+    "types": "src/main.d.ts"
+}

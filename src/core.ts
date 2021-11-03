@@ -67,3 +67,27 @@ class Vector3 {
         );
     }
 }
+
+//Environment class to contain all shapes in project for collisions and other queries.
+class Environment2D {
+    objects: Array<Shape2D>;
+
+    constructor() {
+        this.objects = [];
+    }
+
+    add(shape: Shape2D): void {
+        this.objects.push(shape);
+    }
+
+    remove(index: number): boolean {
+        try {
+            this.objects.splice(index, 1);
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    update() {}
+}

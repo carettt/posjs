@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "./built",
+        "outFile": "./built/pos.js",
         "allowJs": true,
         "target": "es5"
     },

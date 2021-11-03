@@ -16,7 +16,7 @@ class Circle {
         this.radius = radius;
     }
 
-    detectCollision(other: Circle): boolean {
+    detectCollision(other: Shape2D): boolean {
         return other.pos.getMag() - this.pos.getMag() < this.radius;
     }
 }
