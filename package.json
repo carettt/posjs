@@ -1,6 +1,6 @@
 {
     "name": "posjs",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "A 2D/3D physics engine for JavaScript.",
     "main": "built/pos.js",
     "scripts": {
