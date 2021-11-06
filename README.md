@@ -16,16 +16,12 @@
 
 ### 🏠 [Homepage](https://github.com/carettt/posjs#readme)
 
+### ✨ [Demo](TBD)
+
 ## Install
 
 ```sh
- 
-```
-
-## Run tests
-
-```sh
- 
+<script src=&#34;https://cdn.jsdelivr.net/gh/carettt/posjs@main/built/pos.js&#34;></script>
 ```
 
 ## Author
