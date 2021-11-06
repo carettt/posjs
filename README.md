@@ -21,7 +21,7 @@
 ## Install
 
 ```sh
-<script src=&#34;https://cdn.jsdelivr.net/gh/carettt/posjs@main/built/pos.js&#34;></script>
+<script src="https://cdn.jsdelivr.net/gh/carettt/posjs@main/built/pos.js"></script>
 ```
 
 ## Author
