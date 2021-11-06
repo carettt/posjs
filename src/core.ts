@@ -62,6 +62,10 @@ class Vector2 {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     }
 
+    public setMag(scalar: number): Vector2 {
+        return this.norm().mult(scalar);
+    }
+
     public getDirection(): number {
         return Math.atan(this.y / this.x);
     }
@@ -91,9 +95,9 @@ class Vector3 {
         return new Vector3(this.x * scalar, this.y * scalar, this.z * scalar);
     }
 
-    public norm(vec: Vector3): Vector3 {
-        if (vec.getMag() !== 0) {
-            return vec.mult(1 / vec.getMag());
+    public norm(): Vector3 {
+        if (this.getMag() !== 0) {
+            return this.mult(1 / this.getMag());
         }
     }
 
@@ -113,6 +117,10 @@ class Vector3 {
         return Math.sqrt(
             Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2)
         );
+    }
+
+    public setMag(scalar: number): Vector3 {
+        return this.norm().mult(scalar);
     }
 }
 
@@ -163,6 +171,7 @@ class Environment2D {
     }
 
     public update() {
+        let collidedObjects = [];
         for (let i = 0; i < this.objects.length; i++) {
             //detect and react to collisions for every other object (may optimize in the future)
             let otherObjects = [...this.objects];

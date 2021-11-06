@@ -34,8 +34,12 @@ class Circle {
         this.pos = this.pos.add(this.velocity);
     }
 
-    public detectCollisionWithCircle(other: Shape2D): void {
-        if (other.pos.sub(this.pos).getMag() < this.radius) {
+    public detectCollisionWithCircle(other: Shape2D): boolean {
+        if (other.pos.sub(this.pos).getMag() <= this.radius) {
+            //Correct overlap
+            this.pos = this.pos.sub(other.pos.sub(this.pos));
+            other.pos = other.pos.sub(this.pos.sub(other.pos));
+
             //Collide with other circle
             let initialVelocity = this.velocity;
 
@@ -51,14 +55,12 @@ class Circle {
 
             this.impulse();
             other.impulse();
+
+            return true;
         }
     }
 
     public detectCollisionWithEdge(canvasSize: Vector2): void {
-        this.pos.limitComponents(
-            canvasSize.x - this.radius,
-            canvasSize.y - this.radius
-        );
         if (
             this.pos.x < this.radius ||
             this.pos.x > canvasSize.x - this.radius
@@ -72,6 +74,10 @@ class Circle {
             //reflect velocity about a normal (1, this.pos.y)
             this.velocity = this.velocity.reflect(new Vector2(1, this.pos.y));
         }
+        this.pos.limitComponents(
+            canvasSize.x - this.radius,
+            canvasSize.y - this.radius
+        );
     }
 
     public get getIndex(): number {

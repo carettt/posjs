@@ -53,6 +53,9 @@ var Vector2 = /** @class */ (function () {
     Vector2.prototype.getMag = function () {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     };
+    Vector2.prototype.setMag = function (scalar) {
+        return this.norm().mult(scalar);
+    };
     Vector2.prototype.getDirection = function () {
         return Math.atan(this.y / this.x);
     };
@@ -74,9 +77,9 @@ var Vector3 = /** @class */ (function () {
     Vector3.prototype.mult = function (scalar) {
         return new Vector3(this.x * scalar, this.y * scalar, this.z * scalar);
     };
-    Vector3.prototype.norm = function (vec) {
-        if (vec.getMag() !== 0) {
-            return vec.mult(1 / vec.getMag());
+    Vector3.prototype.norm = function () {
+        if (this.getMag() !== 0) {
+            return this.mult(1 / this.getMag());
         }
     };
     Vector3.prototype.lerp = function (other, amt) {
@@ -87,6 +90,9 @@ var Vector3 = /** @class */ (function () {
     };
     Vector3.prototype.getMag = function () {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2));
+    };
+    Vector3.prototype.setMag = function (scalar) {
+        return this.norm().mult(scalar);
     };
     return Vector3;
 }());
@@ -119,6 +125,7 @@ var Environment2D = /** @class */ (function () {
     };
     Environment2D.prototype.update = function () {
         var _this = this;
+        var collidedObjects = [];
         var _loop_1 = function (i) {
             //detect and react to collisions for every other object (may optimize in the future)
             var otherObjects = __spreadArray([], this_1.objects, true);
@@ -161,7 +168,10 @@ var Circle = /** @class */ (function () {
         this.pos = this.pos.add(this.velocity);
     };
     Circle.prototype.detectCollisionWithCircle = function (other) {
-        if (other.pos.sub(this.pos).getMag() < this.radius) {
+        if (other.pos.sub(this.pos).getMag() <= this.radius) {
+            //Correct overlap
+            this.pos = this.pos.sub(other.pos.sub(this.pos));
+            other.pos = other.pos.sub(this.pos.sub(other.pos));
             //Collide with other circle
             var initialVelocity = this.velocity;
             this.velocity = other.velocity
@@ -174,10 +184,10 @@ var Circle = /** @class */ (function () {
                 .sub(other.velocity);
             this.impulse();
             other.impulse();
+            return true;
         }
     };
     Circle.prototype.detectCollisionWithEdge = function (canvasSize) {
-        this.pos.limitComponents(canvasSize.x - this.radius, canvasSize.y - this.radius);
         if (this.pos.x < this.radius ||
             this.pos.x > canvasSize.x - this.radius) {
             //reflect velocity about a normal (this.pos.x, 1)
@@ -188,6 +198,7 @@ var Circle = /** @class */ (function () {
             //reflect velocity about a normal (1, this.pos.y)
             this.velocity = this.velocity.reflect(new Vector2(1, this.pos.y));
         }
+        this.pos.limitComponents(canvasSize.x - this.radius, canvasSize.y - this.radius);
     };
     Object.defineProperty(Circle.prototype, "getIndex", {
         get: function () {
