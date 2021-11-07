@@ -129,11 +129,18 @@ class Environment2D {
     objects: Array<Shape2D>;
     collideOnEdge: boolean;
     canvasSize: Vector2;
+    frameRate: number;
+    lastUpdate: number;
+    timeNow: number;
+    delta: number;
 
     constructor(collideOnEdge: boolean, canvasSize: Vector2 = null) {
         this.objects = [];
         this.collideOnEdge = collideOnEdge;
         this.canvasSize = canvasSize;
+        this.timeNow = Date.now();
+        this.lastUpdate = Date.now();
+        this.delta = 0;
     }
 
     public addCircle(
@@ -144,12 +151,13 @@ class Environment2D {
         maxSpeed: number = null
     ): Circle {
         let newCircle = new Circle(
-            initial,
             maxSpeed,
             pos,
             mass,
             radius,
-            this.objects.length
+            this.objects.length,
+            this.delta,
+            initial
         );
 
         this.objects.push(newCircle);
@@ -171,6 +179,10 @@ class Environment2D {
     }
 
     public update() {
+        this.timeNow = Date.now();
+        this.delta = (this.timeNow - this.lastUpdate) / 1000;
+        this.lastUpdate = this.timeNow;
+
         let collidedObjects = [];
         for (let i = 0; i < this.objects.length; i++) {
             //detect and react to collisions for every other object (may optimize in the future)
@@ -185,7 +197,7 @@ class Environment2D {
             if (this.collideOnEdge) {
                 this.objects[i].detectCollisionWithEdge(this.canvasSize);
             }
-            this.objects[i].update();
+            this.objects[i].update(this.delta);
         }
     }
 }

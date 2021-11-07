@@ -103,11 +103,14 @@ var Environment2D = /** @class */ (function () {
         this.objects = [];
         this.collideOnEdge = collideOnEdge;
         this.canvasSize = canvasSize;
+        this.timeNow = Date.now();
+        this.lastUpdate = Date.now();
+        this.delta = 0;
     }
     Environment2D.prototype.addCircle = function (pos, mass, radius, initial, maxSpeed) {
         if (initial === void 0) { initial = new Vector2(0, 0); }
         if (maxSpeed === void 0) { maxSpeed = null; }
-        var newCircle = new Circle(initial, maxSpeed, pos, mass, radius, this.objects.length);
+        var newCircle = new Circle(maxSpeed, pos, mass, radius, this.objects.length, this.delta, initial);
         this.objects.push(newCircle);
         return newCircle;
     };
@@ -125,6 +128,9 @@ var Environment2D = /** @class */ (function () {
     };
     Environment2D.prototype.update = function () {
         var _this = this;
+        this.timeNow = Date.now();
+        this.delta = (this.timeNow - this.lastUpdate) / 1000;
+        this.lastUpdate = this.timeNow;
         var collidedObjects = [];
         var _loop_1 = function (i) {
             //detect and react to collisions for every other object (may optimize in the future)
@@ -138,7 +144,7 @@ var Environment2D = /** @class */ (function () {
             if (this_1.collideOnEdge) {
                 this_1.objects[i].detectCollisionWithEdge(this_1.canvasSize);
             }
-            this_1.objects[i].update();
+            this_1.objects[i].update(this_1.delta);
         };
         var this_1 = this;
         for (var i = 0; i < this.objects.length; i++) {
@@ -148,7 +154,7 @@ var Environment2D = /** @class */ (function () {
     return Environment2D;
 }());
 var Circle = /** @class */ (function () {
-    function Circle(initial, maxSpeed, pos, mass, radius, index) {
+    function Circle(maxSpeed, pos, mass, radius, index, delta, initial) {
         if (initial === void 0) { initial = new Vector2(0, 0); }
         this.velocity = new Vector2(0, 0);
         this.maxSpeed = maxSpeed;
@@ -157,15 +163,15 @@ var Circle = /** @class */ (function () {
         this.mass = mass;
         this.radius = radius;
         this.index = index;
-        this.impulse(initial);
+        this.impulse(delta, initial);
     }
-    Circle.prototype.impulse = function (impulse) {
+    Circle.prototype.impulse = function (delta, impulse) {
         if (impulse === void 0) { impulse = new Vector2(0, 0); }
         this.velocity = this.velocity.add(impulse);
         if (this.maxSpeed !== null) {
             this.velocity.limitMag(this.maxSpeed);
         }
-        this.pos = this.pos.add(this.velocity);
+        this.pos = this.pos.add(this.velocity.mult(delta));
     };
     Circle.prototype.detectCollisionWithCircle = function (other) {
         if (other.pos.sub(this.pos).getMag() <= this.radius) {
@@ -182,9 +188,6 @@ var Circle = /** @class */ (function () {
             other.velocity = initialVelocity
                 .add(this.velocity)
                 .sub(other.velocity);
-            this.impulse();
-            other.impulse();
-            return true;
         }
     };
     Circle.prototype.detectCollisionWithEdge = function (canvasSize) {
@@ -211,8 +214,8 @@ var Circle = /** @class */ (function () {
         if (other === this) {
         }
     };
-    Circle.prototype.update = function () {
-        this.impulse();
+    Circle.prototype.update = function (delta) {
+        this.impulse(delta);
         this.velocity = this.velocity.lerp(new Vector2(0, 0), 0.1);
     };
     return Circle;

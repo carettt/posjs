@@ -8,12 +8,13 @@ class Circle {
     index: number;
 
     constructor(
-        initial: Vector2 = new Vector2(0, 0),
         maxSpeed: number,
         pos: Vector2,
         mass: number,
         radius: number,
-        index: number
+        index: number,
+        delta: number,
+        initial: Vector2 = new Vector2(0, 0)
     ) {
         this.velocity = new Vector2(0, 0);
         this.maxSpeed = maxSpeed;
@@ -23,18 +24,18 @@ class Circle {
         this.radius = radius;
         this.index = index;
 
-        this.impulse(initial);
+        this.impulse(delta, initial);
     }
 
-    public impulse(impulse: Vector2 = new Vector2(0, 0)): void {
+    public impulse(delta, impulse: Vector2 = new Vector2(0, 0)): void {
         this.velocity = this.velocity.add(impulse);
         if (this.maxSpeed !== null) {
             this.velocity.limitMag(this.maxSpeed);
         }
-        this.pos = this.pos.add(this.velocity);
+        this.pos = this.pos.add(this.velocity.mult(delta));
     }
 
-    public detectCollisionWithCircle(other: Shape2D): boolean {
+    public detectCollisionWithCircle(other: Shape2D): void {
         if (other.pos.sub(this.pos).getMag() <= this.radius) {
             //Correct overlap
             this.pos = this.pos.sub(other.pos.sub(this.pos));
@@ -52,11 +53,6 @@ class Circle {
             other.velocity = initialVelocity
                 .add(this.velocity)
                 .sub(other.velocity);
-
-            this.impulse();
-            other.impulse();
-
-            return true;
         }
     }
 
@@ -89,8 +85,8 @@ class Circle {
         }
     }
 
-    public update() {
-        this.impulse();
+    public update(delta) {
+        this.impulse(delta);
         this.velocity = this.velocity.lerp(new Vector2(0, 0), 0.1);
     }
 }
